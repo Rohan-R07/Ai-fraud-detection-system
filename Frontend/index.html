@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fraud Detection System</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --success: #059669;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --prototype-bg: #fffbeb;
+            --prototype-border: #fef3c7;
+            --prototype-text: #92400e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--bg-gradient);
+            padding: 0;
+            color: var(--text);
+        }
+
+        /* Prototype Banner */
+        .prototype-banner {
+            width: 100%;
+            background: var(--prototype-bg);
+            border-bottom: 1px solid var(--prototype-border);
+            padding: 0.75rem 1rem;
+            text-align: center;
+            color: var(--prototype-text);
+            font-size: 0.9rem;
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        .prototype-banner strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 2rem 1rem;
+            gap: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text);
+            background: linear-gradient(to right, #4f46e5, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        button {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        #resultSection {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+        }
+
+        #resultSection.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result-box-fraud {
+            background-color: #fef2f2;
+            border: 2px solid #fee2e2;
+            color: var(--danger);
+        }
+
+        .result-box-safe {
+            background-color: #f0fdf4;
+            border: 2px solid #dcfce7;
+            color: var(--success);
+        }
+
+        .prediction-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 1rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: var(--text);
+            display: block;
+        }
+
+        .error-box {
+            background-color: #fff1f2;
+            border-left: 4px solid var(--danger);
+            color: var(--danger);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        /* Real System Flow Section */
+        .flow-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .flow-header {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .flow-header:hover {
+            background: #f9fafb;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .flow-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+            background: #fff;
+        }
+
+        .flow-content.open {
+            max-height: 1000px;
+            transition: max-height 0.6s ease-in-out;
+            padding-bottom: 1.5rem;
+        }
+
+        .workflow {
+            padding: 0 1.5rem;
+            position: relative;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .workflow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: var(--text);
+            padding-top: 0.25rem;
+        }
+
+        .step-connector {
+            position: absolute;
+            left: 15px;
+            top: 32px;
+            bottom: -15px;
+            width: 2px;
+            background: #e5e7eb;
+            z-index: 0;
+        }
+
+        .workflow-step:last-child .step-connector {
+            display: none;
+        }
+
+        /* Utils */
+        .spinner {
+            display: inline-block;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.75rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+        }
+
+        .flow-header.active .chevron {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="prototype-banner">
+        <strong>🚧 Prototype Mode</strong>
+        This system simulates fraud detection. In real-world deployment, transactions are processed automatically.
+    </div>
+
+    <div class="main-wrapper">
+        <div class="container">
+            <h1>AI Fraud Detection</h1>
+
+            <form id="fraudForm">
+                <div class="form-group">
+                    <label for="step">Step (Time interval of transaction)</label>
+                    <input type="number" id="step" placeholder="e.g. 1" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="type">Transaction Type</label>
+                    <select id="type" required>
+                        <option value="" disabled selected>Select type...</option>
+                        <option value="TRANSFER">TRANSFER</option>
+                        <option value="PAYMENT">PAYMENT</option>
+                        <option value="CASH_OUT">CASH_OUT</option>
+                        <option value="CASH_IN">CASH_IN</option>
+                        <option value="DEBIT">DEBIT</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount ($)</label>
+                    <input type="number" id="amount" placeholder="0.00" step="0.01" required min="0">
+                </div>
+
+                <button type="submit" id="submitBtn">
+                    <span id="btnContent">Check Fraud</span>
+                </button>
+            </form>
+
+            <div id="errorBox" class="error-box"></div>
+
+            <div id="resultSection">
+                <div id="predictionText" class="prediction-title"></div>
+                <div class="stats-grid">
+                    <div>
+                        <span class="stat-label">Confidence</span>
+                        <span id="confidenceVal" class="stat-value"></span>
+                    </div>
+                    <div>
+                        <span class="stat-label">Risk Level</span>
+                        <span id="riskLevel" class="stat-value"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real System Flow Section -->
+        <div class="flow-container">
+            <button class="flow-header" id="toggleFlow">
+                <span>How This Works in Real Systems</span>
+                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="flow-content" id="flowContent">
+                <div class="workflow">
+                    <div class="workflow-step">
+                        <div class="step-connector"></div>
+                        <div class="step-icon">1</div>
+                        <div class="step-text">User makes transaction (UPI / Card / Bank)</div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-connector"></div>
+                        <div class="step-icon">2</div>
+                        <div class="step-text">Bank system generates transaction data automatically</div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-connector"></div>
+                        <div class="step-icon">3</div>
+                        <div class="step-text">AI model receives data in real-time via API</div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-connector"></div>
+                        <div class="step-icon">4</div>
+                        <div class="step-text">AI engine predicts fraud probability instantly</div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-icon">5</div>
+                        <div class="step-text"><strong>If risky:</strong> System triggers an alert, blocks the
+                            transaction, or flags for manual review</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('fraudForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnContent = document.getElementById('btnContent');
+        const resultSection = document.getElementById('resultSection');
+        const errorBox = document.getElementById('errorBox');
+        const toggleFlow = document.getElementById('toggleFlow');
+        const flowContent = document.getElementById('flowContent');
+
+        // Collapsible Flow Logic
+        toggleFlow.addEventListener('click', () => {
+            toggleFlow.classList.toggle('active');
+            flowContent.classList.toggle('open');
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Reset UI states
+            errorBox.style.display = 'none';
+            resultSection.classList.remove('show');
+            setTimeout(() => { if (!resultSection.classList.contains('show')) resultSection.style.display = 'none'; }, 500);
+
+            // Set loading state
+            submitBtn.disabled = true;
+            btnContent.innerHTML = '<span class="spinner"></span> Analyzing transaction...';
+
+            const payload = {
+                step: parseInt(document.getElementById('step').value),
+                type: document.getElementById('type').value,
+                amount: parseFloat(document.getElementById('amount').value)
+            };
+
+            try {
+                const response = await fetch('https://fraud-api-373905963942.asia-south1.run.app/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error('API connection failed');
+
+                const data = await response.json();
+                displayResults(data);
+
+            } catch (error) {
+                console.error(error);
+                errorBox.textContent = 'Connection Error: Unable to reach the AI engine. Please ensure your backend CORS is configured.';
+                errorBox.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                btnContent.textContent = 'Check Fraud';
+            }
+        });
+
+        function displayResults(data) {
+            const isFraud = data.prediction === 'Fraud';
+            const conf = data.confidence;
+
+            // Set Box Style
+            resultSection.className = isFraud ? 'result-box-fraud' : 'result-box-safe';
+
+            // Set Text
+            document.getElementById('predictionText').textContent = isFraud ? '⚠️ Fraud Detected' : '✅ Transaction Safe';
+            document.getElementById('confidenceVal').textContent = (conf * 100).toFixed(1) + '%';
+
+            // Risk Level Logic
+            const riskEl = document.getElementById('riskLevel');
+
+            // if (conf < 0.3) {
+            //     risk = '🟢 Low Risk';
+            //     riskClass = 'risk-low';
+            // } else if (conf <= 0.7) {
+            //     risk = '🟡 Medium Risk';
+            //     riskClass = 'risk-medium';
+            // } else {
+            //     risk = '🔴 High Risk';
+            //     riskClass = 'risk-high';
+            // }
+
+
+            // Normalize confidence (force spread)
+            // let adjustedConf = (conf - 0.5) * 2;
+
+            // // Clamp between 0 and 1
+            // adjustedConf = Math.max(0, Math.min(1, adjustedConf));
+
+            // // Risk logic using adjusted confidence
+            // if (adjustedConf < 0.3) {
+            //     risk = '🟢 Low Risk';
+            //     riskClass = 'risk-low';
+            // } else if (adjustedConf <= 0.7) {
+            //     risk = '🟡 Medium Risk';
+            //     riskClass = 'risk-medium';
+            // } else {
+            //     risk = '🔴 High Risk';
+            //     riskClass = 'risk-high';
+            // }
+
+
+            if (conf < 0.7) {
+                risk = '🟢 Low Risk';
+                riskClass = 'risk-low';
+            } else if (conf <= 0.9) {
+                risk = '🟡 Medium Risk';
+                riskClass = 'risk-medium';
+            } else {
+                risk = '🔴 High Risk';
+                riskClass = 'risk-high';
+            }
+
+            // Apply to UI
+            riskEl.textContent = risk;
+            riskEl.className = `result-value ${riskClass}`;
+
+            // Trigger Animation
+            resultSection.style.display = 'block';
+            setTimeout(() => resultSection.classList.add('show'), 10);
+        }
+    </script>
+</body>
+
+</html>
