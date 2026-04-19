@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SafeGuard AI | Fraud Detection</title>
     <!-- Modern Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-dark: #0f172a;
@@ -29,10 +31,10 @@
 
         body {
             background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -59,13 +61,60 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header {
             text-align: center;
             margin-bottom: 32px;
+            position: relative;
+        }
+
+        .prototype-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            color: #eab308;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            cursor: help;
+            position: relative;
+        }
+
+        .prototype-tag:hover::after {
+            content: "Uses a hybrid approach: ML model for pattern detection + AI for explanation.";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 10px;
+            width: 180px;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 8px;
+            z-index: 10;
+            text-transform: none;
+            letter-spacing: normal;
         }
 
         .header h1 {
@@ -101,7 +150,8 @@
             position: relative;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -111,12 +161,69 @@
             font-size: 15px;
             transition: all 0.3s ease;
             outline: none;
+            height: 52px;
+            /* Fixed height for alignment */
         }
 
-        input:focus, select:focus {
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        input:focus,
+        select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
             background: rgba(15, 23, 42, 0.8);
+        }
+
+        /* Shimmer Effect */
+        .loading .stat-value,
+        .loading .explanation-text,
+        .loading .prediction-badge,
+        .loading #predictionTitle {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: transparent !important;
+            border-radius: 6px;
+            border: none !important;
+            min-height: 20px;
+        }
+
+        .loading .prediction-badge {
+            width: 80px;
+            height: 24px;
+        }
+
+        .loading .stat-value::after,
+        .loading .explanation-text::after,
+        .loading .prediction-badge::after,
+        .loading #predictionTitle::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.08),
+                    transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         button {
@@ -161,8 +268,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; scale: 0.95; }
-            to { opacity: 1; scale: 1; }
+            from {
+                opacity: 0;
+                scale: 0.95;
+            }
+
+            to {
+                opacity: 1;
+                scale: 1;
+            }
         }
 
         .result-card {
@@ -187,8 +301,15 @@
             text-transform: uppercase;
         }
 
-        .badge-fraud { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-        .badge-safe { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .badge-fraud {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .badge-safe {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
 
         .stat-grid {
             display: grid;
@@ -240,20 +361,6 @@
             color: var(--text-main);
         }
 
-        /* Loading Spinner */
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         .error-msg {
             background: rgba(239, 68, 68, 0.1);
             color: var(--danger);
@@ -267,171 +374,233 @@
         }
 
         /* Risk Colors */
-        .risk-high { color: var(--danger); }
-        .risk-medium { color: var(--warning); }
-        .risk-low { color: var(--success); }
+        .risk-high {
+            color: var(--danger);
+        }
 
+        .risk-medium {
+            color: var(--warning);
+        }
+
+        .risk-low {
+            color: var(--success);
+        }
+
+        .system-flow {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .flow {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .flow span {
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .flow-note {
+            font-size: 12px;
+            opacity: 0.7;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="card">
-        <div class="header">
-            <h1>SafeGuard AI</h1>
-            <p>Advanced Real-time Fraud Detection</p>
-        </div>
-
-        <form id="fraudForm">
-            <div class="form-group">
-                <label>Step (Time Period)</label>
-                <input type="number" id="step" placeholder="Enter step (e.g., 1)" required min="1">
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="prototype-tag">⚠️ Prototype Mode</div>
+                <h1>SafeGuard AI</h1>
+                <p>Advanced Real-time Fraud Detection</p>
             </div>
 
-            <div class="form-group">
-                <label>Transaction Type</label>
-                <select id="type" required>
-                    <option value="" disabled selected>Select type</option>
-                    <option value="PAYMENT">PAYMENT</option>
-                    <option value="TRANSFER">TRANSFER</option>
-                    <option value="CASH_OUT">CASH_OUT</option>
-                    <option value="CASH_IN">CASH_IN</option>
-                    <option value="DEBIT">DEBIT</option>
-                </select>
+            <form id="fraudForm">
+                <div class="form-group">
+                    <label>Step (Time Period)</label>
+                    <input type="number" id="step" placeholder="Enter step (e.g., 1)" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label>Transaction Type</label>
+                    <select id="type" required>
+                        <option value="" disabled selected>Select type</option>
+                        <option value="PAYMENT">PAYMENT</option>
+                        <option value="TRANSFER">TRANSFER</option>
+                        <option value="CASH_OUT">CASH_OUT</option>
+                        <option value="CASH_IN">CASH_IN</option>
+                        <option value="DEBIT">DEBIT</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount ($)</label>
+                    <input type="number" id="amount" placeholder="0.00" step="0.01" required min="0">
+                </div>
+
+                <button type="submit" id="submitBtn">
+                    <span id="btnText">Check Fraud</span>
+                </button>
+            </form>
+
+            <div id="errorMsg" class="error-msg"></div>
+
+            <div id="resultArea">
+                <div class="result-card" id="resultCard">
+                    <div class="prediction-header">
+                        <h3 id="predictionTitle" style="font-size: 18px; font-weight: 700;">Prediction Result</h3>
+                        <span id="predictionBadge" class="prediction-badge"></span>
+                    </div>
+
+                    <div class="stat-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Confidence</span>
+                            <span id="confidenceVal" class="stat-value">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Risk Level</span>
+                            <span id="riskLevel" class="stat-value">---</span>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <div class="explanation-title">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a10 10 0 1 0 10 10H12V2z"></path>
+                                <path d="M12 12L2.69 7"></path>
+                                <path d="M12 22a10 10 0 0 0 10-10H12v10z"></path>
+                            </svg>
+                            AI EXPLANATION
+                        </div>
+                        <p id="explanationText" class="explanation-text">Analyzing patterns...</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Amount ($)</label>
-                <input type="number" id="amount" placeholder="0.00" step="0.01" required min="0">
-            </div>
-
-            <button type="submit" id="submitBtn">
-                <span id="btnText">Check Fraud</span>
-            </button>
-        </form>
-
-        <div id="errorMsg" class="error-msg"></div>
-
-        <div id="resultArea">
-            <div class="result-card">
-                <div class="prediction-header">
-                    <h3 id="predictionTitle" style="font-size: 18px; font-weight: 700;">Prediction Result</h3>
-                    <span id="predictionBadge" class="prediction-badge"></span>
+            <div class="system-flow">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 10px;">How the System Works</h3>
+                <div class="flow">
+                    <span>👤 User</span>
+                    <span>→</span>
+                    <span>📊 ML Model</span>
+                    <span>→</span>
+                    <span>📈 Risk Score</span>
+                    <span>→</span>
+                    <span>🤖 Gemini AI</span>
+                    <span>→</span>
+                    <span>✅ Final Verdict</span>
                 </div>
-
-                <div class="stat-grid">
-                    <div class="stat-item">
-                        <span class="stat-label">Confidence</span>
-                        <span id="confidenceVal" class="stat-value">0%</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Risk Level</span>
-                        <span id="riskLevel" class="stat-value">---</span>
-                    </div>
-                </div>
-
-                <div class="explanation-box">
-                    <div class="explanation-title">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12L2.69 7"></path><path d="M12 22a10 10 0 0 0 10-10H12v10z"></path></svg>
-                        AI EXPLANATION
-                    </div>
-                    <p id="explanationText" class="explanation-text">Analyzing patterns...</p>
-                </div>
+                <p class="flow-note">
+                    ML detects patterns. Gemini explains the result.
+                </p>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    const form = document.getElementById('fraudForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const btnText = document.getElementById('btnText');
-    const resultArea = document.getElementById('resultArea');
-    const errorMsg = document.getElementById('errorMsg');
+    <script>
+        const form = document.getElementById('fraudForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const resultArea = document.getElementById('resultArea');
+        const resultCard = document.getElementById('resultCard');
+        const errorMsg = document.getElementById('errorMsg');
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Reset state
-        errorMsg.style.display = 'none';
-        resultArea.style.display = 'none';
-        submitBtn.disabled = true;
-        btnText.innerHTML = '<div class="spinner"></div> Processing...';
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        const payload = {
-            step: parseInt(document.getElementById('step').value),
-            type: document.getElementById('type').value,
-            amount: parseFloat(document.getElementById('amount').value)
-        };
+            // Reset state
+            errorMsg.style.display = 'none';
+            resultArea.style.display = 'block';
+            resultCard.classList.add('loading');
+            submitBtn.disabled = true;
+            btnText.textContent = 'Analyzing Transaction...';
 
-        try {
-            // Local backend URL
-            const response = await fetch('http://127.0.0.1:8000/predict', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            const payload = {
+                step: parseInt(document.getElementById('step').value),
+                type: document.getElementById('type').value,
+                amount: parseFloat(document.getElementById('amount').value)
+            };
 
-            if (!response.ok) throw new Error('System error: Unable to reach AI engine.');
+            try {
+                // Local backend URL
+                const response = await fetch('https://fraud-api-373905963942.asia-south1.run.app/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            const data = await response.json();
-            showResult(data);
+                if (!response.ok) throw new Error('System error: Unable to reach AI engine.');
 
-        } catch (err) {
-            errorMsg.textContent = err.message;
-            errorMsg.style.display = 'block';
-        } finally {
-            submitBtn.disabled = false;
-            btnText.textContent = 'Check Fraud';
-        }
-    });
+                const data = await response.json();
+                showResult(data);
 
-    function showResult(data) {
-        const isFraud = data.prediction === 'Fraud';
-        const confidence = data.confidence;
-        
-        // 1. Set Badge and Title
-        const badge = document.getElementById('predictionBadge');
-        badge.textContent = data.prediction;
-        badge.className = `prediction-badge ${isFraud ? 'badge-fraud' : 'badge-safe'}`;
-        document.getElementById('predictionTitle').textContent = isFraud ? '⚠️ Fraud Alert' : '✅ Transaction Safe';
-
-        // 2. Set Stats
-        document.getElementById('confidenceVal').textContent = (confidence * 100).toFixed(1) + '%';
-        
-        // 3. Determine Risk Level
-        const riskEl = document.getElementById('riskLevel');
-        let riskText = '';
-        let riskClass = '';
-
-        if (isFraud) {
-            if (confidence > 0.85) {
-                riskText = 'CRITICAL';
-                riskClass = 'risk-high';
-            } else {
-                riskText = 'ELEVATED';
-                riskClass = 'risk-medium';
+            } catch (err) {
+                errorMsg.textContent = err.message;
+                errorMsg.style.display = 'block';
+                resultArea.style.display = 'none';
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = 'Check Fraud';
+                resultCard.classList.remove('loading');
             }
-        } else {
-            if (confidence > 0.85) {
-                riskText = 'MINIMAL';
-                riskClass = 'risk-low';
+        });
+
+        function showResult(data) {
+            const isFraud = data.prediction === 'Fraud';
+            const confidence = data.confidence;
+
+            // 1. Set Badge and Title
+            const badge = document.getElementById('predictionBadge');
+            badge.textContent = data.prediction;
+            badge.className = `prediction-badge ${isFraud ? 'badge-fraud' : 'badge-safe'}`;
+            document.getElementById('predictionTitle').textContent = isFraud ? '⚠️ Fraud Alert' : '✅ Transaction Safe';
+
+            // 2. Set Stats
+            document.getElementById('confidenceVal').textContent = (confidence * 100).toFixed(1) + '%';
+
+            // 3. Determine Risk Level
+            const riskEl = document.getElementById('riskLevel');
+            let riskText = '';
+            let riskClass = '';
+
+            if (isFraud) {
+                if (confidence > 0.85) {
+                    riskText = 'CRITICAL';
+                    riskClass = 'risk-high';
+                } else {
+                    riskText = 'ELEVATED';
+                    riskClass = 'risk-medium';
+                }
             } else {
-                riskText = 'CAUTION';
-                riskClass = 'risk-medium';
+                if (confidence > 0.85) {
+                    riskText = 'MINIMAL';
+                    riskClass = 'risk-low';
+                } else {
+                    riskText = 'CAUTION';
+                    riskClass = 'risk-medium';
+                }
             }
+
+            riskEl.textContent = riskText;
+            riskEl.className = `stat-value ${riskClass}`;
+
+            // 4. Set Explanation
+            document.getElementById('explanationText').textContent = data.explanation || "No explanation provided by AI.";
         }
-
-        riskEl.textContent = riskText;
-        riskEl.className = `stat-value ${riskClass}`;
-
-        // 4. Set Explanation
-        document.getElementById('explanationText').textContent = data.explanation || "No explanation provided by AI.";
-
-        // 5. Show Result Area
-        resultArea.style.display = 'block';
-    }
-</script>
+    </script>
 
 </body>
+
 </html>
