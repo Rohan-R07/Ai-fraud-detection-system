@@ -394,22 +394,29 @@
             text-align: center;
         }
 
-        .flow {
+        .flow-box {
             display: flex;
-            justify-content: center;
-            gap: 8px;
             flex-wrap: wrap;
-            font-size: 14px;
-            margin: 10px 0;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
 
-        .flow span {
-            padding: 4px 8px;
-            border-radius: 6px;
+        .flow-step {
+            padding: 8px 10px;
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.08);
+            font-size: 13px;
+            min-width: 120px;
+        }
+
+        .arrow {
+            font-size: 16px;
+            opacity: 0.7;
         }
 
         .flow-note {
+            margin-top: 10px;
             font-size: 12px;
             opacity: 0.7;
         }
@@ -490,21 +497,33 @@
             </div>
 
             <div class="system-flow">
-                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 10px;">How the System Works</h3>
-                <div class="flow">
-                    <span>👤 User</span>
-                    <span>→</span>
-                    <span>📊 ML Model</span>
-                    <span>→</span>
-                    <span>📈 Risk Score</span>
-                    <span>→</span>
-                    <span>🤖 Gemini AI</span>
-                    <span>→</span>
-                    <span>✅ Final Verdict</span>
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 15px;">How the System Works</h3>
+
+                <div class="flow-box">
+                    <div class="flow-step">🏦 Transaction Data<br><small>UPI / Debit / Credit / Company Systems</small>
+                    </div>
+                    <div class="arrow">→</div>
+
+                    <div class="flow-step">📥 Data Processing<br><small>User transaction history is collected</small>
+                    </div>
+                    <div class="arrow">→</div>
+
+                    <div class="flow-step">📊 ML Model Analysis<br><small>Patterns & behavior are analyzed</small></div>
+                    <div class="arrow">→</div>
+
+                    <div class="flow-step">📈 Risk Score<br><small>Fraud probability is calculated</small></div>
+                    <div class="arrow">→</div>
+
+                    <div class="flow-step">🤖 Gemini AI<br><small>Interprets result & logs</small></div>
+                    <div class="arrow">→</div>
+
+                    <div class="flow-step">✅ Final Verdict<br><small>Fraud / Not Fraud decision</small></div>
                 </div>
+
                 <p class="flow-note">
-                    ML detects patterns. Gemini explains the result.
+                    ML handles large-scale data processing, while Gemini AI provides reasoning and final validation.
                 </p>
+
             </div>
         </div>
     </div>
