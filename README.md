@@ -1,4 +1,5 @@
 
+
 # 🛡️ Fraud Detection System using Machine Learning
 
 An intelligent fraud detection system that leverages **Machine Learning** to identify fraudulent financial transactions. The application analyzes transaction data, extracts meaningful features, and predicts whether a transaction is **Legitimate** or **Fraudulent** using a **Random Forest Classifier**.
